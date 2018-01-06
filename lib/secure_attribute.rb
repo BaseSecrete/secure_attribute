@@ -6,6 +6,16 @@ module SecureAttribute
     model.extend(ClassMethods)
   end
 
+  def self.encipher(algorithm, data, key)
+    encrypted, iv = SecureAttribute.encrypt(algorithm, data, key)
+    SecureAttribute.pack(algorithm, iv, encrypted)
+  end
+
+  def self.decipher(data, key)
+    algorithm, iv, data = SecureAttribute.unpack(data)
+    SecureAttribute.decrypt(algorithm, data, key, iv)
+  end
+
   def self.encrypt(algorithm, data, key)
     cipher = OpenSSL::Cipher.new(algorithm).encrypt
     cipher.key = key
@@ -40,13 +50,11 @@ module SecureAttribute
       alias_method attr_writer = "#{name}_without_secure_attribute=", "#{name}="
 
       define_method("#{name}=") do |data|
-        encrypted, iv = SecureAttribute.encrypt(options[:algorithm], data, options[:key])
-        send(attr_writer, SecureAttribute.pack(options[:algorithm], iv, encrypted))
+        send(attr_writer, SecureAttribute.encipher(options[:algorithm], data, options[:key]))
       end
 
       define_method(name) do
-        algorithm, iv, data = SecureAttribute.unpack(send(attr_reader))
-        SecureAttribute.decrypt(algorithm, data, options[:key], iv)
+        SecureAttribute.decipher(send(attr_reader), options[:key])
       end
     end
 
