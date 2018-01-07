@@ -44,7 +44,7 @@ module SecureAttribute
   end
 
   module ClassMethods
-    def secure_attribute(name, options = {})
+    def attr_secure(name, options = {})
       force_defining_active_record_attribute_accessors
       alias_method attr_reader = "#{name}_without_secure_attribute", "#{name}"
       alias_method attr_writer = "#{name}_without_secure_attribute=", "#{name}="

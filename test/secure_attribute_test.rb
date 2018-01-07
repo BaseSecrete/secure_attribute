@@ -23,7 +23,7 @@ class SecureAttributeTest < Minitest::Test
   class FakeModel
     attr_accessor :secret
     include SecureAttribute
-    secure_attribute :secret, algorithm: "AES-256-CBC", key: KEY
+    attr_secure :secret, algorithm: "AES-256-CBC", key: KEY
   end
 
   def test_secure_attribute_accessors

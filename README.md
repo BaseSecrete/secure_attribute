@@ -11,13 +11,13 @@ While there are already a few encryption gems, Secure Attribute has a different 
 
 There are 2 ways to use it:
 
-- You can call the helper method `secure_attribute` which will do everything for you.
+- You can call the helper method `attr_secure` which will do everything for you.
 It surrounds attribute accessors with the encryption mechanism.
 
 ```ruby
 class User < ActiveRecord::Base
   include SecureAttribute
-  secure_attribute :secret, algorithm: "AES-256-CBC", key: Base64.decode64(ENV["SECURE_ATTRIBUTE_KEY"])
+  attr_secure :secret, algorithm: "AES-256-CBC", key: Base64.decode64(ENV["SECURE_ATTRIBUTE_KEY"])
 end
 
 user = User.new(secret: "test")
