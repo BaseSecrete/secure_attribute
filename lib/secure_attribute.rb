@@ -46,8 +46,10 @@ module SecureAttribute
   module ClassMethods
     def attr_secure(name, options = {})
       force_defining_active_record_attribute_accessors
-      alias_method attr_reader = "#{name}_without_secure_attribute", "#{name}"
-      alias_method attr_writer = "#{name}_without_secure_attribute=", "#{name}="
+      attr_writer(name) unless respond_to?("#{name}=")
+      attr_reader(name) unless respond_to?(name)
+      alias_method(attr_reader = "#{name}_without_secure_attribute", "#{name}")
+      alias_method(attr_writer = "#{name}_without_secure_attribute=", "#{name}=")
 
       define_method("#{name}=") do |data|
         send(attr_writer, SecureAttribute.encipher(options[:algorithm], data, options[:key]))

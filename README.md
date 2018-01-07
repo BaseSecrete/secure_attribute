@@ -12,7 +12,7 @@ While there are already a few encryption gems, Secure Attribute has a different 
 There are 2 ways to use it:
 
 - You can call the helper method `attr_secure` which will do everything for you.
-It surrounds attribute accessors with the encryption mechanism.
+It creates the relevant attribute accessors if missing or surrounds them with the encryption mechanism.
 
 ```ruby
 class User < ActiveRecord::Base
