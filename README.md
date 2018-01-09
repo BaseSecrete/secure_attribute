@@ -7,7 +7,9 @@ While there are already a few encryption gems, Secure Attribute has a different 
 - No constraints
 - Storage format similar to bcrypt
 
-## Example
+## Examples
+
+First, add `gem "secure_attribute"` to your Gemfile and run `bundle install`.
 
 There are 2 ways to use it:
 
