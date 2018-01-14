@@ -45,9 +45,7 @@ module SecureAttribute
 
   module ClassMethods
     def attr_secure(name, options = {})
-      force_defining_active_record_attribute_accessors
-      attr_writer(name) unless respond_to?("#{name}=")
-      attr_reader(name) unless respond_to?(name)
+      ensure_attribute_accessors_are_defined(name)
       alias_method(attr_reader = "#{name}_without_secure_attribute", "#{name}")
       alias_method(attr_writer = "#{name}_without_secure_attribute=", "#{name}=")
 
@@ -60,8 +58,13 @@ module SecureAttribute
       end
     end
 
-    def force_defining_active_record_attribute_accessors
-      define_attribute_methods if defined?(ActiveRecord::Base) && self < ActiveRecord::Base
+    def ensure_attribute_accessors_are_defined(name)
+      if defined?(ActiveRecord::Base) && self < ActiveRecord::Base
+        define_attribute_methods
+      else
+        attr_writer(name) unless respond_to?("#{name}=")
+        attr_reader(name) unless respond_to?(name)
+      end
     end
   end
 end
