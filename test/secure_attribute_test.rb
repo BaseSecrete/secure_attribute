@@ -30,5 +30,13 @@ class SecureAttributeTest < Minitest::Test
     model.secret = "test"
     assert_match(/\A\$AES-256-CBC\$/, model.instance_variable_get(:@secret))
     assert_equal("test", model.secret)
+
+    model.secret = ""
+    assert_equal("", model.instance_variable_get(:@secret))
+    assert_equal("", model.secret)
+
+    model.secret = nil
+    assert_nil(model.instance_variable_get(:@secret))
+    assert_nil(model.secret)
   end
 end

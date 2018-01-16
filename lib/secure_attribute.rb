@@ -50,11 +50,19 @@ module SecureAttribute
       alias_method(attr_writer = "#{name}_without_secure_attribute=", "#{name}=")
 
       define_method("#{name}=") do |data|
-        send(attr_writer, SecureAttribute.encipher(options[:algorithm], data, options[:key]))
+        if data && !data.empty?
+          send(attr_writer, SecureAttribute.encipher(options[:algorithm], data, options[:key]))
+        else
+          send(attr_writer, data)
+        end
       end
 
       define_method(name) do
-        SecureAttribute.decipher(send(attr_reader), options[:key])
+        if (data = send(attr_reader)) && !data.empty?
+          SecureAttribute.decipher(data, options[:key])
+        else
+          data
+        end
       end
     end
 
