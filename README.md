@@ -1,15 +1,8 @@
 # Secure Attribute
 
-*Secure Attribute* is a ruby gem to encrypt attributes of any Ruby object or ActiveRecord model.
+*Secure Attribute* is a ruby gem to encrypt attributes of any Ruby object or ActiveRecord model. It is made to protect sensitive data, such as API secrets, OAuth tokens or even FTP passwords.
 
-While there are already a few encryption gems out there, *Secure Attribute* has no dependencies, no constrains, and a storage format similar to Bcrypt.
-
-As a use case example, let's say you run a marketplace and process payments. Each seller gives you the API token of its payment gateway and you store them in your database.
-This tokens are very sensitive as they can trigger payments and refunds.
-If someone manages to get a dump of your database, he could easily move money on behalf of your customers.
-If your database column is encrypted, then it is a different story.
-
-*Secure Attribute* offers a convenient way to store any kind of sensitive data, such as API secrets, tokens or even FTP passwords.
+While there are already a few encryption gems out there, *Secure Attribute* has no dependencies and no code constraints.
 
 ## Installation
 
