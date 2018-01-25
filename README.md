@@ -1,41 +1,36 @@
 # Secure Attribute
 
-Secure Attribute is a ruby gem to encrypt attributes of any Ruby object or ActiveRecord model.
-While there are already a few encryption gems, Secure Attribute has a different approach:
+*Secure Attribute* is a ruby gem to encrypt attributes of any Ruby object or ActiveRecord model.
 
-- No dependencies
-- No constraints
-- Storage format similar to bcrypt
+While there are already a few encryption gems out there, *Secure Attribute* has no dependencies, no constrains, and a storage format similar to Bcrypt.
 
-The goal is not store the password of users when they authenticate to your site. For this purpose it is recommended to use Bcrypt or Scrypt.
-However it is a convenient and safe way to store data such as API secrets and tokens or even FTP passwords.
-Let's see the importance of encrypting these kind of data.
+As a use case example, let's say you run a marketplace and process payments. Each seller gives you the API token of its payment gateway and you store them in your database.
+This tokens are very sensitive as they can trigger payments and refunds.
+If someone manages to get a dump of your database, he could easily move money on behalf of your customers.
+If your database column is encrypted, then it is a different story.
 
-Let's say your are a market place where you process payments. Each seller gives you the API token of it's payment gateway.
-So in your database you have a column `Seller#payment_gateway_secret`.
-This token is very sensitive because it can triggers payments and refunds.
-If someone got a dump of your database he can move money on the behalf of your customer.
-However it this column is encrypted that his much harder for him and you did a good job to protect your users.
+*Secure Attribute* offers a convenient way to store any kind of sensitive data, such as API secrets, tokens or even FTP passwords.
 
-That's why you should encrypt any API/Oauth secret/password that your store in your database.
+## Installation
 
-## Examples
+Add `gem "secure_attribute"` to your Gemfile and run `bundle install`.
 
-First, add `gem "secure_attribute"` to your Gemfile and run `bundle install`.
-
-Then we need to generate an encryption key. A helper method is available which encodes it in base64.
-The key is encoded in base 64 because it's more convenient to store it in an environment variable.
-For the examples we assume it is stored in environment varaible `SECURE_ATTRIBUTE_KEY`.
-Do not loose this key otherwise yon won't be able to decrypt any data.
+Then, generate an encryption key:
 
 ```ruby
 SecureAttribute.export_random_key_base64("AES-256-CBC")
 ```
 
+The key is encoded in base 64 to make it more convenient to store it in an environment variable.
+**Make sure you do not lose your encryption key or you won't be able to decrypt any data.**
+
+## Usage
+
+*For the examples bellow we assume the key is stored in the environment variable `SECURE_ATTRIBUTE_KEY`.*
+
 There are 2 ways to use it:
 
-- You can call the helper method `attr_secure` which will do everything for you.
-It creates the relevant attribute accessors if missing or surrounds them with the encryption mechanism.
+- You can call the helper method `attr_secure` which creates the relevant attribute accessors if missing, or surrounds them with the encryption mechanism.
 
 ```ruby
 class User < ActiveRecord::Base
@@ -64,13 +59,15 @@ end
 
 ## Storage format
 
-In addition to the data, Secure Attribute stores the encryption algortihm and the initialization vector into a format inspired by bcrypt:
+In addition to the data, *Secure Attribute* stores the encryption algorithm and the initialisation vector into a format inspired by Bcrypt:
 
 ```
 $algorithm$iv$encrypted_data
 ```
 
-This has 2 benefits. First, you don't need an extra column in your database to store the initialisation vector. Secondly, it gives you more flexibility in the future to switch to another encryption algorithm.
+This has 2 benefits:
+- You don't need an extra column in your database to store the initialisation vector.
+- It gives you more flexibility in the future to switch to another encryption algorithm.
 
 ## MIT License
 
