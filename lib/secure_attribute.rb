@@ -68,7 +68,7 @@ module SecureAttribute
 
     def ensure_attribute_accessors_are_defined(name)
       if defined?(ActiveRecord::Base) && self < ActiveRecord::Base
-        define_attribute_methods
+        define_attribute_method(name)
       else
         attr_writer(name) unless respond_to?("#{name}=")
         attr_reader(name) unless respond_to?(name)
